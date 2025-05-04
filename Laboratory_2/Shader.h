@@ -5,6 +5,8 @@
 #include <sstream>
 #include <string>
 #include "GL/glew.h"
+#include "glm/glm.hpp"
+#include "glm/gtc/type_ptr.hpp"
 
 class Shader {
 public:
@@ -33,9 +35,27 @@ public:
 
     void setUniform1f(const std::string& name, float value) {
         GLint location = glGetUniformLocation(program, name.c_str());
-        if (location != -1) 
-        {
+        if (location != -1) {
             glUniform1f(location, value);
+        }
+    }
+
+    void setUniform3f(const std::string& name, float x, float y, float z) {
+        GLint location = glGetUniformLocation(program, name.c_str());
+        if (location != -1) {
+            glUniform3f(location, x, y, z);
+        }
+    }
+
+    void setUniform3f(const std::string& name, const std::string& subName, float x, float y, float z) {
+        std::string fullName = name + "." + subName;
+        setUniform3f(fullName, x, y, z);
+    }
+
+    void setUniformMat4(const std::string& name, const glm::mat4& mat) {
+        GLint location = glGetUniformLocation(program, name.c_str());
+        if (location != -1) {
+            glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(mat));
         }
     }
 
